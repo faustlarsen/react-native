@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button , ScrollView, FlatList} from 'react-native';
+import GoalItem from './components/GoalItem';
+
+
 
 export default function App() {
-  const [eneterGoal,setEnteredGoal] = useState('');
-  const [courseGoals,setCourseGoals] = useState([]);
+  const [enteredGoal, setEnteredGoal] = useState('');
+  const [courseGoals, setCourseGoals] = useState([]);
 
-  function goalInputHandler(enteredText) {
+  const goalInputHandler = enteredText => {
     setEnteredGoal(enteredText);
-  }
+  };
+
 
   const addGoalHandler = () => {
     setCourseGoals(currentGoals => [
-      ...currentGoals, 
-      {key: Math.random().toString(), value: eneterGoal}
+      ...currentGoals,
+      { id: Math.random().toString(), value: enteredGoal }
     ]);
   };
 
@@ -20,48 +24,37 @@ export default function App() {
     <View style={styles.screen}>
       <View style={styles.inputContainer}>
         <TextInput
-          placeholder="Course Goal" 
-          style={styles.input} 
-          onChangeText={goalInputHandler} 
-          value={eneterGoal}
-          />
+          placeholder="Course Goal"
+          style={styles.input}
+          onChangeText={goalInputHandler}
+          value={enteredGoal}
+        />
         <Button title="ADD" onPress={addGoalHandler} />
       </View>
-      <FlatList  
+      <FlatList
+        keyExtractor={(item, index) => item.id}
         data={courseGoals}
-        renderItem={itemData => (
-          <View style={styles.listItem}>
-            <Text>{itemData.item.value}</Text>
-          </View>
-        )}
-      />
-    </View>
+        renderItem={itemData => <GoalItem title={itemData.item.value} />}
+        />
+      </View>
   );
 }
-
 const styles = StyleSheet.create({
   screen: {
-    padding: 50, 
+    padding: 50
   },
   inputContainer: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   input: {
-    width: '80%', 
-    borderColor: 'black', 
-    borderWidth: 1, 
-    padding: 10 
-  },
-  listItem: {
-    padding: 10,
-    marginTop: 10,
-    backgroundColor: '#ccc',
+    width: '80%',
     borderColor: 'black',
-    borderRightWidth: 1
-  }
-
+    borderWidth: 1,
+    padding: 10
+  },
 });
+
 
 
